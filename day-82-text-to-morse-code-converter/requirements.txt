@@ -1,0 +1,6 @@
+# Add the following dependencies:
+# - any necessary libraries for your project
+Click==7.0
+colorama==0.4.1
+
+

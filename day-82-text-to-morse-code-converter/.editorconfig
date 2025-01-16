@@ -1,0 +1,6 @@
+# Set the default code style
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
