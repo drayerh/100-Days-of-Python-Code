@@ -17,7 +17,7 @@ The Text to Morse Code Converter is a command line tool that allows users to con
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/drayerh/text-to-morse-code-converter.git
+    git clone https://github.com/drayerh/100-Days-of-Python-Code/tree/main/day-82-text-to-morse-code-converter.git
     cd text-to-morse-code-converter
     ```
 
