@@ -1,18 +1,5 @@
-{% include "header.html" %}
-
-        <!-- Page Header-->
-        <header class="masthead" style="background-image: url('https://images.unsplash.com/photo-1470092306007-055b6797ca72?ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80')">
-            <div class="container position-relative px-4 px-lg-5">
-                <div class="row gx-4 gx-lg-5 justify-content-center">
-                    <div class="col-md-10 col-lg-8 col-xl-7">
-                        <div class="site-heading">
-                            <h1>Emmanuel's Portfolio</h1>
-                            <span class="subheading">The Tech World of Emmanuel</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
+{% extends "base.html" %}
+{% block content %}
 
         <!-- Main Content-->
         <div class="container px-4 px-lg-5">
@@ -22,7 +9,7 @@
     <div class="profile">
       <img src="static/images/emmanuel.png" alt="emmanuel-profile-img">
       <h2>Hello.</h2>
-      <p class="intro">I am a Professional Tech Consultant with formidable expertise in Software, Cloud and Devops Engineering. I'm entrepreneurial in spirit and humanitarian at heart. I ❤️ to create innovative solutions to meet the fast pacing changes of this digital age.</p>
+      <p class="intro">I am a Professional Tech Consultant Devops Engineering. I'm entrepreneurial in spirit and humanitarian at heart. I ❤️ to create innovative solutions to meet the fast pacing changes of this digital age.</p>
     </div>
     <hr>
     <div class="skills">
@@ -32,30 +19,17 @@
       <div class="skill-row">
         <img class="chilli-img" src="static/images/chillies.png" alt="chillies-img">
 
-        <h3>Devops Engineering</h3>
-        <p>But my best skill is actually in eating banku and tilapia. I am the undisputed king of banku and tilapia challenges. Ghost Peppers and Carolina Reapers are my favourite snacks.</p>
+        <h3>Development</h3>
+        <p>I have the enterprise level front end and back end skills under my toolbelt.</p>
 
       </div>
 
       <div class="skill-row">
         <img class="code-img" src="https://media.giphy.com/media/LmNwrBhejkK9EFP504/giphy.gif" alt="code-img">
 
-        <h3> Cloud Computing</h3>
-        <p>I ventured into Cloud Computing in 2020 after several years of providing IT solutions. Over time, I have gained a wealth of experience designing and developing websites, web applications as well as providing solutions in Cloud Computing, Python Development and Devops/SRE.</p>
+        <h3>Devops & Cloud Cloud Engineering</h3>
+        <p>I have gained a wealth of experience designing and developing websites, applications as well as using Devops/SRE tools in provisioning Cloud infrastructure according to the AWS well architected framework.</p>
 
-      </div>
-      <div class="skill-row">
-        <img class="chilli-img" src="static/images/chillies.png" alt="chillies-img">
-
-        <h3>Devops Engineering</h3>
-        <p>But my best skill is actually in eating banku and tilapia. I am the undisputed king of banku and tilapia challenges. Ghost Peppers and Carolina Reapers are my favourite snacks.</p>
-
-
-    </div>
-            </div>
-        </div>
 
         <hr>
-
-
-    {% include "footer.html" %}
+{% endblock %}

@@ -1,25 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Resume</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
+{% extends "base.html" %}
+{% block content %}
+
 <body>
     <header>
-        <h1>Resume</h1>
+        <h1>My Resume</h1>
         <nav>
             <ul>
                 <li><a href="https://app.rezi.ai/s/ATCuNXGzPD0YaM9rJtwT"> View Resume</a></li>
             </ul>
         </nav>
     </header>
+
+
     <section>
         <h2>My Resume</h2>
         <p>Details about your professional experience, education, and skills.</p>
     </section>
 </body>
-</html>
+
+{% endblock %}
 
 
