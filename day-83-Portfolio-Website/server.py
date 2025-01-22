@@ -107,7 +107,7 @@ def contact():
         mail.send(msg)
 
         flash('Your message has been sent successfully!', 'success')
-        return redirect(url_for('home')
+        return redirect(url_for('home'))
     return render_template('contact.html', form=form)
 
 if __name__ == '__main__':
