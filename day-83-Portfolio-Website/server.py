@@ -7,6 +7,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 from flask_wtf.csrf import CSRFProtect
 from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin
+import uuid
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'default-secret-key')
@@ -21,7 +22,7 @@ if not app.debug:
     app.logger.addHandler(file_handler)
 
 # Configure Flask-Mail
-app.config['MAIL_SERVER'] = 'smtp.yourmailserver.com'
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
@@ -53,6 +54,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(255), unique=True)
     password = db.Column(db.String(255))
+    fs_uniquifier = db.Column(db.String(64), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(app, user_datastore)
@@ -81,9 +83,9 @@ def resume():
 def testimonials():
     return render_template('testimonials.html')
 
-@app.route('/blog')
-def blog():
-    return render_template('blog.html')
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
@@ -105,7 +107,7 @@ def contact():
         mail.send(msg)
 
         flash('Your message has been sent successfully!', 'success')
-        return redirect(url_for('home'))
+        return redirect(url_for('home')
     return render_template('contact.html', form=form)
 
 if __name__ == '__main__':
