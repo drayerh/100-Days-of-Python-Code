@@ -2,11 +2,27 @@ import pickle
 import copy
 
 def print_board(board):
+    """
+    Prints the current state of the Tic-Tac-Toe board.
+
+    Args:
+        board (list): A 2D list representing the Tic-Tac-Toe board.
+    """
     for row in board:
         print(" | ".join(row))
         print("-" * 5)
 
 def check_winner(board, player):
+    """
+    Checks if the given player has won the game.
+
+    Args:
+        board (list): A 2D list representing the Tic-Tac-Toe board.
+        player (str): The player's symbol ('X' or 'O').
+
+    Returns:
+        bool: True if the player has won, False otherwise.
+    """
     for row in board:
         if all([cell == player for cell in row]):
             return True
@@ -18,9 +34,25 @@ def check_winner(board, player):
     return False
 
 def is_full(board):
+    """
+    Checks if the Tic-Tac-Toe board is full.
+
+    Args:
+        board (list): A 2D list representing the Tic-Tac-Toe board.
+
+    Returns:
+        bool: True if the board is full, False otherwise.
+    """
     return all([cell != " " for row in board for cell in row])
 
 def save_game(state, filename='tic_tac_toe_save.pkl'):
+    """
+    Saves the current game state to a file.
+
+    Args:
+        state (tuple): The current game state.
+        filename (str): The name of the file to save the game state to.
+    """
     try:
         with open(filename, 'wb') as f:
             pickle.dump(state, f)
@@ -29,6 +61,15 @@ def save_game(state, filename='tic_tac_toe_save.pkl'):
         print(f"Error saving game: {e}")
 
 def load_game(filename='tic_tac_toe_save.pkl'):
+    """
+    Loads a saved game state from a file.
+
+    Args:
+        filename (str): The name of the file to load the game state from.
+
+    Returns:
+        tuple: The loaded game state, or None if the file does not exist or an error occurs.
+    """
     try:
         with open(filename, 'rb') as f:
             state = pickle.load(f)
@@ -42,9 +83,21 @@ def load_game(filename='tic_tac_toe_save.pkl'):
         return None
 
 def reset_board():
+    """
+    Resets the Tic-Tac-Toe board to its initial empty state.
+
+    Returns:
+        list: A 2D list representing the empty Tic-Tac-Toe board.
+    """
     return [[" " for _ in range(3)] for _ in range(3)]
 
 def print_move_history(move_history):
+    """
+    Prints the history of moves made during the game.
+
+    Args:
+        move_history (list): A list of tuples representing the move history.
+    """
     print("Game History:")
     for i, (board, player) in enumerate(move_history):
         print(f"Move {i + 1} by Player {player}:")
@@ -52,12 +105,24 @@ def print_move_history(move_history):
         print()
 
 def print_statistics(scores, games_played, rounds_played, ties):
+    """
+    Prints the game statistics.
+
+    Args:
+        scores (dict): A dictionary containing the scores of the players.
+        games_played (int): The number of games played.
+        rounds_played (int): The number of rounds played.
+        ties (int): The number of tied games.
+    """
     print(f"Score - X: {scores.get('X', 0)}, O: {scores.get('O', 0)}")
     print(f"Games Played: {games_played}")
     print(f"Rounds Played: {rounds_played}")
     print(f"Ties: {ties}")
 
 def print_welcome_message():
+    """
+    Prints the welcome message for the game.
+    """
     welcome_message = r"""
  __        __   _                            _          _____ _        _____            _____
  \ \      / /__| | ___ ___  _ __ ___   ___  | |_ ___   |_   _| |__   __|_   _|__   ___  |_   _|__   ___
@@ -69,6 +134,9 @@ def print_welcome_message():
     print(welcome_message)
 
 def print_instructions():
+    """
+    Prints the instructions for how to play the game.
+    """
     instructions = """
 How to Play Tic-Tac-Toe:
 1. The game is played on a 3x3 grid.
@@ -89,6 +157,9 @@ How to Play Tic-Tac-Toe:
     print(instructions)
 
 def main():
+    """
+    The main function to run the Tic-Tac-Toe game.
+    """
     print_welcome_message()
     print_instructions()
     state = load_game()
