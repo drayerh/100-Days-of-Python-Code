@@ -1,52 +1,73 @@
-import unittest
+import pytest
 from main import print_board, check_winner, is_full, save_game, load_game, reset_board, print_move_history, print_statistics
 
-class TestTicTacToe(unittest.TestCase):
+class TestTicTacToe:
+    """
+    Unit test class for testing the Tic-Tac-Toe game functions.
+    """
 
-    def board_prints_correctly(self):
+    def test_board_prints_correctly(self, capsys):
+        """
+        Test that the board prints correctly.
+        """
         board = [["X", "O", "X"], ["O", "X", "O"], ["X", "O", "X"]]
         expected_output = "X | O | X\n-----\nO | X | O\n-----\nX | O | X\n-----\n"
-        with self.assertLogs() as log:
-            print_board(board)
-        self.assertIn(expected_output, log.output[0])
+        print_board(board)
+        captured = capsys.readouterr()
+        assert expected_output in captured.out
 
-    def winner_is_detected_correctly(self):
+    def test_winner_is_detected_correctly(self):
+        """
+        Test that the winner is detected correctly.
+        """
         board = [["X", "X", "X"], ["O", " ", "O"], [" ", " ", " "]]
-        self.assertTrue(check_winner(board, "X"))
-        self.assertFalse(check_winner(board, "O"))
+        assert check_winner(board, "X")
+        assert not check_winner(board, "O")
 
-    def board_is_full(self):
+    def test_board_is_full(self):
+        """
+        Test that the board is correctly identified as full or not full.
+        """
         board = [["X", "O", "X"], ["O", "X", "O"], ["X", "O", "X"]]
-        self.assertTrue(is_full(board))
+        assert is_full(board)
         board = [["X", "O", "X"], ["O", " ", "O"], ["X", "O", "X"]]
-        self.assertFalse(is_full(board))
+        assert not is_full(board)
 
-    def game_saves_and_loads_correctly(self):
+    def test_game_saves_and_loads_correctly(self):
+        """
+        Test that the game state saves and loads correctly.
+        """
         state = (reset_board(), "X", {"X": 1, "O": 0}, 1, [])
         save_game(state, "test_save.pkl")
         loaded_state = load_game("test_save.pkl")
-        self.assertEqual(state, loaded_state)
+        assert state == loaded_state
 
-    def board_resets_correctly(self):
+    def test_board_resets_correctly(self):
+        """
+        Test that the board resets correctly.
+        """
         board = reset_board()
-        self.assertEqual(board, [[" " for _ in range(3)] for _ in range(3)])
+        assert board == [[" " for _ in range(3)] for _ in range(3)]
 
-    def move_history_prints_correctly(self):
+    def test_move_history_prints_correctly(self, capsys):
+        """
+        Test that the move history prints correctly.
+        """
         move_history = [([["X", " ", " "], [" ", " ", " "], [" ", " ", " "]], "X")]
         expected_output = "Move 1 by Player X:\nX |   |  \n-----\n  |   |  \n-----\n  |   |  \n-----\n"
-        with self.assertLogs() as log:
-            print_move_history(move_history)
-        self.assertIn(expected_output, log.output[0])
+        print_move_history(move_history)
+        captured = capsys.readouterr()
+        assert expected_output in captured.out
 
-    def statistics_print_correctly(self):
+    def test_statistics_print_correctly(self, capsys):
+        """
+        Test that the game statistics print correctly.
+        """
         scores = {"X": 1, "O": 0}
         games_played = 1
         rounds_played = 1
         ties = 0
         expected_output = "Score - X: 1, O: 0\nGames Played: 1\nRounds Played: 1\nTies: 0\n"
-        with self.assertLogs() as log:
-            print_statistics(scores, games_played, rounds_played, ties)
-        self.assertIn(expected_output, log.output[0])
-
-if __name__ == "__main__":
-    unittest.main()
+        print_statistics(scores, games_played, rounds_played, ties)
+        captured = capsys.readouterr()
+        assert expected_output in captured.out
