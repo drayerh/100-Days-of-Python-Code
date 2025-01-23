@@ -9,6 +9,7 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/styles.css')}}"
@@ -41,4 +42,39 @@
   <script src="static/js/scripts.js"></script>
   </body>
 
-</html>
+<footer class="bg-light text-center text-lg-start">
+  <div class="container p-4">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 mb-4 mb-md-0">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+            <a href="tel:+1 (302) 480-1344" class="btn btn-outline-dark btn-sm">
+              <i class="bi bi-telephone"></i> +1 (234) 567-890
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a href="mailto:cto@foramen.io" class="btn btn-outline-dark btn-sm">
+              <i class="bi bi-envelope"></i> cto@foramen.io
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a href="https://twitter.com/niiayerh_" target="_blank" class="btn btn-outline-dark btn-sm">
+              <i class="bi bi-twitter"></i> @emmanuel
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a href="https://github.com/drayerh" target="_blank" class="btn btn-outline-dark btn-sm">
+              <i class="bi bi-github"></i> github.com/drayerh
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a href="https://linkedin.com/in/drayerh" target="_blank" class="btn btn-outline-dark btn-sm">
+              <i class="bi bi-linkedin"></i> linkedin.com/in/drayerh
+            </a>
+          </li>
+        </ul>
+        <p class="text-center mt-3">© {{ datetime.now().year }} Emmanuel's Portfolio</p>
+      </div>
+    </div>
+  </div>
+</footer></html>

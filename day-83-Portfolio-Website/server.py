@@ -8,9 +8,18 @@ from logging.handlers import RotatingFileHandler
 from flask_wtf.csrf import CSRFProtect
 from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin
 import uuid
+from datetime import datetime
+
+
+
+
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'default-secret-key')
+
+@app.context_processor
+def inject_datetime():
+    return {'datetime': datetime}
 
 # Configure logging
 if not app.debug:
