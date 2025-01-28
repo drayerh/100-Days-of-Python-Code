@@ -29,9 +29,9 @@ class WatermarkApp:
         self.upload_logo_button.pack()
 
         self.watermark_type = tk.StringVar(value="text")
-        self.text_radio = tk.Radiobutton(self.root, text="Text Watermark", variable=self.watermark_type, value="text")
+        self.text_radio = tk.Radiobutton(self.root, text="Text Watermark", variable=self.watermark_type, value="text", command=self.toggle_watermark_options)
         self.text_radio.pack()
-        self.logo_radio = tk.Radiobutton(self.root, text="Logo Watermark", variable=self.watermark_type, value="logo")
+        self.logo_radio = tk.Radiobutton(self.root, text="Logo Watermark", variable=self.watermark_type, value="logo", command=self.toggle_watermark_options)
         self.logo_radio.pack()
 
         self.transparency_label = tk.Label(self.root, text="Transparency:")
@@ -60,6 +60,16 @@ class WatermarkApp:
 
         self.save_button = tk.Button(self.root, text="Save Images", command=self.save_images)
         self.save_button.pack()
+
+        self.toggle_watermark_options()
+
+    def toggle_watermark_options(self):
+        if self.watermark_type.get() == "text":
+            self.watermark_text_entry.config(state=tk.NORMAL)
+            self.upload_logo_button.config(state=tk.DISABLED)
+        else:
+            self.watermark_text_entry.config(state=tk.DISABLED)
+            self.upload_logo_button.config(state=tk.NORMAL)
 
     def upload_images(self):
         file_paths = filedialog.askopenfilenames()
