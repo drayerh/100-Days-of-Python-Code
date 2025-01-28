@@ -1,0 +1,2 @@
+pillow==1.1.7
+tkinter==8.5

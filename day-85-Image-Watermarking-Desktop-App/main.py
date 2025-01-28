@@ -1,63 +1,65 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox, ttk
-from PIL import (Image, ImageTk, ImageDraw, ImageFont, UnidentifiedImageError)
+from tkinter import filedialog, messagebox
+from PIL import Image, ImageTk, ImageDraw, ImageFont, UnidentifiedImageError
 
 class WatermarkApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Image Watermarking App")
-        self.root.geometry("800x600")
-
-        self.image_label = tk.Label(root)
-        self.image_label.pack()
-
-        self.upload_button = tk.Button(root, text="Upload Images", command=self.upload_images)
-        self.upload_button.pack()
-
-        self.watermark_text_entry = tk.Entry(root, width=50)
-        self.watermark_text_entry.pack()
-        self.watermark_text_entry.insert(0, "Enter watermark text here")
-
-        self.upload_logo_button = tk.Button(root, text="Upload Logo", command=self.upload_logo)
-        self.upload_logo_button.pack()
-
-        self.watermark_type = tk.StringVar(value="text")
-        self.text_radio = tk.Radiobutton(root, text="Text Watermark", variable=self.watermark_type, value="text")
-        self.text_radio.pack()
-        self.logo_radio = tk.Radiobutton(root, text="Logo Watermark", variable=self.watermark_type, value="logo")
-        self.logo_radio.pack()
-
-        self.transparency_label = tk.Label(root, text="Transparency:")
-        self.transparency_label.pack()
-        self.transparency_slider = tk.Scale(root, from_=0, to=255, orient=tk.HORIZONTAL)
-        self.transparency_slider.set(128)
-        self.transparency_slider.pack()
-
-        self.x_position_label = tk.Label(root, text="X Position:")
-        self.x_position_label.pack()
-        self.x_position_slider = tk.Scale(root, from_=0, to=800, orient=tk.HORIZONTAL)
-        self.x_position_slider.set(0)
-        self.x_position_slider.pack()
-
-        self.y_position_label = tk.Label(root, text="Y Position:")
-        self.y_position_label.pack()
-        self.y_position_slider = tk.Scale(root, from_=0, to=600, orient=tk.HORIZONTAL)
-        self.y_position_slider.set(0)
-        self.y_position_slider.pack()
-
-        self.add_watermark_button = tk.Button(root, text="Add Watermark", command=self.add_watermark)
-        self.add_watermark_button.pack()
-
-        self.preview_button = tk.Button(root, text="Preview Next Image", command=self.preview_next_image)
-        self.preview_button.pack()
-
-        self.save_button = tk.Button(root, text="Save Images", command=self.save_images)
-        self.save_button.pack()
-
+        self.setup_gui()
         self.images = []
         self.watermarked_images = []
         self.logo = None
         self.current_preview_index = 0
+
+    def setup_gui(self):
+        self.root.title("Image Watermarking App")
+        self.root.geometry("800x600")
+
+        self.image_label = tk.Label(self.root)
+        self.image_label.pack()
+
+        self.upload_button = tk.Button(self.root, text="Upload Images", command=self.upload_images)
+        self.upload_button.pack()
+
+        self.watermark_text_entry = tk.Entry(self.root, width=50)
+        self.watermark_text_entry.pack()
+        self.watermark_text_entry.insert(0, "Enter watermark text here")
+
+        self.upload_logo_button = tk.Button(self.root, text="Upload Logo", command=self.upload_logo)
+        self.upload_logo_button.pack()
+
+        self.watermark_type = tk.StringVar(value="text")
+        self.text_radio = tk.Radiobutton(self.root, text="Text Watermark", variable=self.watermark_type, value="text")
+        self.text_radio.pack()
+        self.logo_radio = tk.Radiobutton(self.root, text="Logo Watermark", variable=self.watermark_type, value="logo")
+        self.logo_radio.pack()
+
+        self.transparency_label = tk.Label(self.root, text="Transparency:")
+        self.transparency_label.pack()
+        self.transparency_slider = tk.Scale(self.root, from_=0, to=255, orient=tk.HORIZONTAL)
+        self.transparency_slider.set(128)
+        self.transparency_slider.pack()
+
+        self.x_position_label = tk.Label(self.root, text="X Position:")
+        self.x_position_label.pack()
+        self.x_position_slider = tk.Scale(self.root, from_=0, to=800, orient=tk.HORIZONTAL)
+        self.x_position_slider.set(0)
+        self.x_position_slider.pack()
+
+        self.y_position_label = tk.Label(self.root, text="Y Position:")
+        self.y_position_label.pack()
+        self.y_position_slider = tk.Scale(self.root, from_=0, to=600, orient=tk.HORIZONTAL)
+        self.y_position_slider.set(0)
+        self.y_position_slider.pack()
+
+        self.add_watermark_button = tk.Button(self.root, text="Add Watermark", command=self.add_watermark)
+        self.add_watermark_button.pack()
+
+        self.preview_button = tk.Button(self.root, text="Preview Next Image", command=self.preview_next_image)
+        self.preview_button.pack()
+
+        self.save_button = tk.Button(self.root, text="Save Images", command=self.save_images)
+        self.save_button.pack()
 
     def upload_images(self):
         file_paths = filedialog.askopenfilenames()
@@ -68,7 +70,7 @@ class WatermarkApp:
                     image = Image.open(file_path)
                     self.images.append(image)
                 except UnidentifiedImageError:
-                    messagebox.showerror("Error", f"The selected file {file_path} is not a valid image")
+                    messagebox.showerror("Error", f"The selected file '{file_path}' is not a valid image")
             if self.images:
                 self.display_image(self.images[0])
 
@@ -78,7 +80,7 @@ class WatermarkApp:
             try:
                 self.logo = Image.open(file_path)
             except UnidentifiedImageError:
-                messagebox.showerror("Error", "The selected file is not a valid image")
+                messagebox.showerror("Error", f"The selected file '{file_path}' is not a valid image")
 
     def display_image(self, image):
         image.thumbnail((800, 600))
@@ -99,10 +101,9 @@ class WatermarkApp:
         for image in self.images:
             watermarked_image = image.copy()
             draw = ImageDraw.Draw(watermarked_image)
-            width, height = watermarked_image.size
 
             if self.watermark_type.get() == "text":
-                watermark_text = self.watermark_text_entry.get()
+                watermark_text = self.watermark_text_entry.get().strip()
                 if not watermark_text:
                     messagebox.showerror("Error", "Please enter watermark text")
                     return
