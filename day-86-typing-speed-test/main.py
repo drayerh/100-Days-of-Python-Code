@@ -3,7 +3,17 @@ from tkinter import messagebox
 import time
 
 class TypingSpeedTestApp:
+    """
+    A class to represent a typing speed test application.
+    """
+
     def __init__(self, root):
+        """
+        Initialize the TypingSpeedTestApp with the given root window.
+
+        Parameters:
+        root (tk.Tk): The root window of the Tkinter application.
+        """
         self.root = root
         self.root.title("Typing Speed Test")
         self.root.geometry("800x400")
@@ -16,6 +26,9 @@ class TypingSpeedTestApp:
         self.setup_gui()
 
     def setup_gui(self):
+        """
+        Set up the graphical user interface for the typing speed test application.
+        """
         self.instructions_label = tk.Label(self.root, text="Type the following text as quickly as you can:")
         self.instructions_label.pack(pady=10)
 
@@ -53,6 +66,12 @@ class TypingSpeedTestApp:
         self.add_button.pack(pady=5)
 
     def start_test(self, event=None):
+        """
+        Start the typing test and the timer when the user begins typing.
+
+        Parameters:
+        event (tk.Event): The event that triggered the method (default is None).
+        """
         if not self.start_time:
             self.start_time = time.time()
             self.timer_running = True
@@ -61,12 +80,21 @@ class TypingSpeedTestApp:
             self.text_box.bind("<Return>", self.check_completion)
 
     def update_timer(self):
+        """
+        Update the timer label with the elapsed time since the test started.
+        """
         if self.timer_running:
             elapsed_time = time.time() - self.start_time
             self.timer_label.config(text=f"Time: {elapsed_time:.2f} seconds")
             self.root.after(100, self.update_timer)
 
     def update_typing_speed(self, event=None):
+        """
+        Update the typing speed label in real-time as the user types.
+
+        Parameters:
+        event (tk.Event): The event that triggered the method (default is None).
+        """
         if self.start_time:
             elapsed_time = time.time() - self.start_time
             typed_text = self.text_box.get("1.0", tk.END).strip()
@@ -75,6 +103,12 @@ class TypingSpeedTestApp:
             self.typing_speed_label.config(text=f"Typing Speed: {wpm:.2f} WPM")
 
     def check_completion(self, event=None):
+        """
+        Check if the user has completed typing the sample text.
+
+        Parameters:
+        event (tk.Event): The event that triggered the method (default is None).
+        """
         typed_text = self.text_box.get("1.0", tk.END).strip()
         if typed_text == self.sample_text or event.keysym == "Return":
             self.end_time = time.time()
@@ -86,21 +120,39 @@ class TypingSpeedTestApp:
             self.text_box.unbind("<Return>")
 
     def calculate_wpm(self):
+        """
+        Calculate and display the user's typing speed in words per minute.
+        """
         time_taken = self.end_time - self.start_time
         words_typed = len(self.sample_text.split())
         wpm = (words_typed / time_taken) * 60
         self.result_label.config(text=f"Your typing speed is {wpm:.2f} words per minute.")
 
     def calculate_accuracy(self, typed_text):
+        """
+        Calculate and display the user's typing accuracy as a percentage.
+
+        Parameters:
+        typed_text (str): The text typed by the user.
+        """
         correct_chars = sum(1 for a, b in zip(typed_text, self.sample_text) if a == b)
         accuracy = (correct_chars / len(self.sample_text)) * 100
         self.accuracy_label.config(text=f"Accuracy: {accuracy:.2f}%")
 
     def calculate_errors(self, typed_text):
+        """
+        Calculate and display the number of typing errors made by the user.
+
+        Parameters:
+        typed_text (str): The text typed by the user.
+        """
         errors = sum(1 for a, b in zip(typed_text, self.sample_text) if a != b)
         self.errors_label.config(text=f"Errors: {errors}")
 
     def reset_test(self):
+        """
+        Reset the typing test to its initial state.
+        """
         self.start_time = None
         self.end_time = None
         self.timer_running = False
