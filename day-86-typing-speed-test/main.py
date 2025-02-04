@@ -58,6 +58,7 @@ class TypingSpeedTestApp:
             self.timer_running = True
             self.update_timer()
             self.text_box.bind("<space>", self.check_completion)
+            self.text_box.bind("<Return>", self.check_completion)
 
     def update_timer(self):
         if self.timer_running:
@@ -70,12 +71,12 @@ class TypingSpeedTestApp:
             elapsed_time = time.time() - self.start_time
             typed_text = self.text_box.get("1.0", tk.END).strip()
             words_typed = len(typed_text.split())
-            wpm = (words_typed / elapsed_time) * 60
+            wpm = (words_typed / elapsed_time) * 60 if elapsed_time > 0 else 0
             self.typing_speed_label.config(text=f"Typing Speed: {wpm:.2f} WPM")
 
     def check_completion(self, event=None):
         typed_text = self.text_box.get("1.0", tk.END).strip()
-        if typed_text == self.sample_text:
+        if typed_text == self.sample_text or event.keysym == "Return":
             self.end_time = time.time()
             self.timer_running = False
             self.calculate_wpm()
