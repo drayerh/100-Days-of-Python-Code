@@ -26,6 +26,7 @@ class TypingSpeedTestApp:
         self.text_box.pack(pady=10)
         self.text_box.bind("<KeyPress>", self.start_test)
         self.text_box.bind("<KeyRelease>", self.update_typing_speed)
+        self.text_box.bind("<Return>", self.check_completion)
 
         self.start_button = tk.Button(self.root, text="Start", command=self.start_test)
         self.start_button.pack(pady=5)
@@ -48,6 +49,9 @@ class TypingSpeedTestApp:
         self.typing_speed_label = tk.Label(self.root, text="Typing Speed: 0.00 WPM")
         self.typing_speed_label.pack(pady=10)
 
+        self.add_button = tk.Button(self.root, text="Add", command=self.check_completion)
+        self.add_button.pack(pady=5)
+
     def start_test(self, event=None):
         if not self.start_time:
             self.start_time = time.time()
@@ -69,7 +73,7 @@ class TypingSpeedTestApp:
             wpm = (words_typed / elapsed_time) * 60
             self.typing_speed_label.config(text=f"Typing Speed: {wpm:.2f} WPM")
 
-    def check_completion(self, event):
+    def check_completion(self, event=None):
         typed_text = self.text_box.get("1.0", tk.END).strip()
         if typed_text == self.sample_text:
             self.end_time = time.time()
@@ -78,6 +82,7 @@ class TypingSpeedTestApp:
             self.calculate_accuracy(typed_text)
             self.calculate_errors(typed_text)
             self.text_box.unbind("<space>")
+            self.text_box.unbind("<Return>")
 
     def calculate_wpm(self):
         time_taken = self.end_time - self.start_time
