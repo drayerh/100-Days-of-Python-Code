@@ -38,6 +38,9 @@ class TypingSpeedTestApp:
         self.timer_label = tk.Label(self.root, text="Time: 0.00 seconds")
         self.timer_label.pack(pady=10)
 
+        self.accuracy_label = tk.Label(self.root, text="Accuracy: 0.00%")
+        self.accuracy_label.pack(pady=10)
+
     def start_test(self, event=None):
         if not self.start_time:
             self.start_time = time.time()
@@ -57,6 +60,7 @@ class TypingSpeedTestApp:
             self.end_time = time.time()
             self.timer_running = False
             self.calculate_wpm()
+            self.calculate_accuracy(typed_text)
             self.text_box.unbind("<space>")
 
     def calculate_wpm(self):
@@ -65,6 +69,11 @@ class TypingSpeedTestApp:
         wpm = (words_typed / time_taken) * 60
         self.result_label.config(text=f"Your typing speed is {wpm:.2f} words per minute.")
 
+    def calculate_accuracy(self, typed_text):
+        correct_chars = sum(1 for a, b in zip(typed_text, self.sample_text) if a == b)
+        accuracy = (correct_chars / len(self.sample_text)) * 100
+        self.accuracy_label.config(text=f"Accuracy: {accuracy:.2f}%")
+
     def reset_test(self):
         self.start_time = None
         self.end_time = None
@@ -72,6 +81,7 @@ class TypingSpeedTestApp:
         self.text_box.delete("1.0", tk.END)
         self.result_label.config(text="")
         self.timer_label.config(text="Time: 0.00 seconds")
+        self.accuracy_label.config(text="Accuracy: 0.00%")
 
 if __name__ == "__main__":
     root = tk.Tk()
