@@ -25,6 +25,7 @@ class TypingSpeedTestApp:
         self.text_box = tk.Text(self.root, height=10, width=80)
         self.text_box.pack(pady=10)
         self.text_box.bind("<KeyPress>", self.start_test)
+        self.text_box.bind("<KeyRelease>", self.update_typing_speed)
 
         self.start_button = tk.Button(self.root, text="Start", command=self.start_test)
         self.start_button.pack(pady=5)
@@ -44,6 +45,9 @@ class TypingSpeedTestApp:
         self.errors_label = tk.Label(self.root, text="Errors: 0")
         self.errors_label.pack(pady=10)
 
+        self.typing_speed_label = tk.Label(self.root, text="Typing Speed: 0.00 WPM")
+        self.typing_speed_label.pack(pady=10)
+
     def start_test(self, event=None):
         if not self.start_time:
             self.start_time = time.time()
@@ -56,6 +60,14 @@ class TypingSpeedTestApp:
             elapsed_time = time.time() - self.start_time
             self.timer_label.config(text=f"Time: {elapsed_time:.2f} seconds")
             self.root.after(100, self.update_timer)
+
+    def update_typing_speed(self, event=None):
+        if self.start_time:
+            elapsed_time = time.time() - self.start_time
+            typed_text = self.text_box.get("1.0", tk.END).strip()
+            words_typed = len(typed_text.split())
+            wpm = (words_typed / elapsed_time) * 60
+            self.typing_speed_label.config(text=f"Typing Speed: {wpm:.2f} WPM")
 
     def check_completion(self, event):
         typed_text = self.text_box.get("1.0", tk.END).strip()
@@ -91,6 +103,7 @@ class TypingSpeedTestApp:
         self.timer_label.config(text="Time: 0.00 seconds")
         self.accuracy_label.config(text="Accuracy: 0.00%")
         self.errors_label.config(text="Errors: 0")
+        self.typing_speed_label.config(text="Typing Speed: 0.00 WPM")
 
 if __name__ == "__main__":
     root = tk.Tk()
