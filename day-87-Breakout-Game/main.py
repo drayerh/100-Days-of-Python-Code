@@ -4,8 +4,8 @@ import math
 from os import path
 
 # Constants
-WIDTH, HEIGHT = 800, 600
-FPS = 60
+WIDTH, HEIGHT = 800, 600  # Screen dimensions
+FPS = 60  # Frames per second
 COLORS = {
     "background": (30, 30, 30),
     "paddle": (200, 200, 200),
@@ -16,9 +16,11 @@ COLORS = {
     "powerup": (255, 255, 100)
 }
 
-
 class Paddle:
+    """Class representing the paddle in the game."""
+
     def __init__(self):
+        """Initialize the paddle with default attributes."""
         self.width = 120
         self.height = 20
         self.speed = 10
@@ -26,24 +28,34 @@ class Paddle:
         self.normal_width = self.width
 
     def move(self, direction):
+        """
+        Move the paddle left or right.
+
+        Args:
+            direction (str): Direction to move the paddle ('left' or 'right').
+        """
         if direction == "left" and self.rect.left > 0:
             self.rect.x -= self.speed
         if direction == "right" and self.rect.right < WIDTH:
             self.rect.x += self.speed
 
     def reset(self):
+        """Reset the paddle to its initial position and width."""
         self.width = self.normal_width
         self.rect = pygame.Rect(WIDTH // 2 - self.width // 2, HEIGHT - 50, self.width, self.height)
 
-
 class Ball:
+    """Class representing the ball in the game."""
+
     def __init__(self):
+        """Initialize the ball with default attributes."""
         self.radius = 10
         self.reset()
         self.speed = 6
         self.max_speed = 8
 
     def reset(self):
+        """Reset the ball to its initial position and speed."""
         self.speed = 6
         self.rect = pygame.Rect(WIDTH // 2 - self.radius, HEIGHT // 2 - self.radius,
                                 self.radius * 2, self.radius * 2)
@@ -52,6 +64,7 @@ class Ball:
         self.dy = -math.sin(angle) * self.speed
 
     def move(self):
+        """Move the ball and handle wall collisions."""
         self.rect.x += self.dx
         self.rect.y += self.dy
 
@@ -61,9 +74,18 @@ class Ball:
         if self.rect.top <= 0:
             self.dy *= -1
 
-
 class Brick:
+    """Class representing a brick in the game."""
+
     def __init__(self, x, y, tier=1):
+        """
+        Initialize the brick with its position and tier.
+
+        Args:
+            x (int): The x-coordinate of the brick.
+            y (int): The y-coordinate of the brick.
+            tier (int): The tier of the brick (default is 1).
+        """
         self.width = 75
         self.height = 30
         self.rect = pygame.Rect(x, y, self.width, self.height)
@@ -73,22 +95,34 @@ class Brick:
 
     @property
     def color(self):
+        """Return the color of the brick based on its tier."""
         return self.colors[self.tier - 1]
 
-
 class PowerUp:
+    """Class representing a power-up in the game."""
+
     def __init__(self, x, y):
+        """
+        Initialize the power-up with its position.
+
+        Args:
+            x (int): The x-coordinate of the power-up.
+            y (int): The y-coordinate of the power-up.
+        """
         self.size = 20
         self.rect = pygame.Rect(x, y, self.size, self.size)
         self.speed = 3
         self.type = random.choice(["expand", "slow", "multiball"])
 
     def move(self):
+        """Move the power-up downwards."""
         self.rect.y += self.speed
 
-
 class Game:
+    """Class representing the game."""
+
     def __init__(self):
+        """Initialize the game, load assets, and reset the game state."""
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Modern Breakout")
@@ -98,12 +132,14 @@ class Game:
         self.reset_game()
 
     def load_assets(self):
+        """Load game assets such as sounds."""
         self.snd_dir = path.join(path.dirname(__file__), 'sounds')
         self.hit_sound = pygame.mixer.Sound(path.join(self.snd_dir, 'hit.wav'))
         self.break_sound = pygame.mixer.Sound(path.join(self.snd_dir, 'break.wav'))
         self.powerup_sound = pygame.mixer.Sound(path.join(self.snd_dir, 'powerup.wav'))
 
     def reset_game(self):
+        """Reset the game state to start a new game."""
         self.paddle = Paddle()
         self.balls = [Ball()]
         self.bricks = []
@@ -114,6 +150,7 @@ class Game:
         self.create_level()
 
     def create_level(self):
+        """Create a new level with bricks."""
         for row in range(6):
             for col in range(WIDTH // 75):
                 tier = min(3, (row // 2) + 1)
@@ -121,6 +158,7 @@ class Game:
                 self.bricks.append(brick)
 
     def handle_collisions(self):
+        """Handle collisions between the ball, paddle, and bricks."""
         for ball in self.balls:
             # Paddle collision
             if ball.rect.colliderect(self.paddle.rect):
@@ -152,6 +190,7 @@ class Game:
                         ball.dx *= -1
 
     def handle_powerups(self):
+        """Handle power-up movements and collisions with the paddle."""
         for powerup in self.powerups[:]:
             powerup.move()
             if powerup.rect.colliderect(self.paddle.rect):
@@ -162,6 +201,12 @@ class Game:
                 self.powerups.remove(powerup)
 
     def apply_powerup(self, powerup):
+        """
+        Apply the effect of a power-up.
+
+        Args:
+            powerup (PowerUp): The power-up to apply.
+        """
         if powerup.type == "expand":
             self.paddle.width = min(200, self.paddle.width + 40)
             self.paddle.rect = pygame.Rect(
@@ -179,6 +224,7 @@ class Game:
             self.balls.append(new_ball)
 
     def show_instructions(self):
+        """Display game instructions on the screen."""
         instructions = [
             "Welcome to Modern Breakout!",
             "Instructions:",
@@ -196,6 +242,7 @@ class Game:
         self.wait_for_keypress()
 
     def wait_for_keypress(self):
+        """Wait for the player to press any key."""
         waiting = True
         while waiting:
             for event in pygame.event.get():
@@ -206,6 +253,7 @@ class Game:
                     waiting = False
 
     def run(self):
+        """Main game loop."""
         self.show_instructions()
         running = True
         while running:
@@ -268,7 +316,6 @@ class Game:
             pygame.display.flip()
 
         pygame.quit()
-
 
 if __name__ == "__main__":
     game = Game()
