@@ -178,7 +178,35 @@ class Game:
             new_ball.dy = self.balls[0].dy
             self.balls.append(new_ball)
 
+    def show_instructions(self):
+        instructions = [
+            "Welcome to Modern Breakout!",
+            "Instructions:",
+            "1. Use the LEFT and RIGHT arrow keys to move the paddle.",
+            "2. Prevent the ball from falling off the bottom of the screen.",
+            "3. Break all the bricks to advance to the next level.",
+            "4. Collect power-ups to gain advantages.",
+            "Press any key to start the game."
+        ]
+        self.screen.fill(COLORS["background"])
+        for i, line in enumerate(instructions):
+            text = self.font.render(line, True, (255, 255, 255))
+            self.screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - 100 + i * 30))
+        pygame.display.flip()
+        self.wait_for_keypress()
+
+    def wait_for_keypress(self):
+        waiting = True
+        while waiting:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+                if event.type == pygame.KEYDOWN:
+                    waiting = False
+
     def run(self):
+        self.show_instructions()
         running = True
         while running:
             self.clock.tick(FPS)
