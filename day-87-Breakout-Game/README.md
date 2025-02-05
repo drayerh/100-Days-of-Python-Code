@@ -13,9 +13,10 @@ A modern version of the classic Breakout game built with Python and Pygame.
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/drayerh/100-Days-of-Python-Code/tree/main/day-87-Breakout-Gameday-87-Breakout-Game
+    git clone https://github.com/drayerh/100-Days-of-Python-Code.git
    
-    cd modern-breakout-game
+    cd day-87-Breakout-Game
+
     ```
 
 2. Install the required dependencies:
