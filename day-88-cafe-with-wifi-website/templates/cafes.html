@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+      {% block title %}All Cafes{% endblock %}
+
+      {% block content %}
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <h1>All Cafes</h1>
+
+            <table class="table" style="color: white">
+              {% for cafe in cafes %}
+              <tr>
+                <td>{{ cafe.name }}</td>
+                <td><a href="{{ cafe.map_url }}">Maps Link</a></td>
+                <td><a href="{{ cafe.img_url }}">Image Link</a></td>
+                <td>{{ cafe.location }}</td>
+                <td>{{ 'Yes' if cafe.has_sockets else 'No' }}</td>
+                <td>{{ 'Yes' if cafe.has_toilet else 'No' }}</td>
+                <td>{{ 'Yes' if cafe.has_wifi else 'No' }}</td>
+                <td>{{ 'Yes' if cafe.can_take_calls else 'No' }}</td>
+                <td>{{ cafe.seats }}</td>
+                <td>{{ cafe.coffee_price }}</td>
+              </tr>
+              {% endfor %}
+            </table>
+            <p><a href="{{ url_for('home') }}">Return to index page</a></p>
+          </div>
+        </div>
+      </div>
+
+      {% endblock %}
