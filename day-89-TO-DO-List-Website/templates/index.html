@@ -1,0 +1,47 @@
+<!-- templates/index.html -->
+{% extends "base.html" %}
+
+{% block content %}
+    <form action="{{ url_for('index') }}" method="POST">
+        <div class="input-group mb-4">
+            <input type="text" class="form-control" name="content" placeholder="Add a new task" required>
+            <select class="form-select" name="priority">
+                <option value="1">Low</option>
+                <option value="2">Medium</option>
+                <option value="3">High</option>
+            </select>
+            <button class="btn btn-primary" type="submit">Add Task</button>
+        </div>
+    </form>
+
+    {% if tasks %}
+        <ul class="list-group">
+            {% for task in tasks %}
+                <li class="list-group-item d-flex justify-content-between align-items-center {% if task.completed %}list-group-item-secondary{% endif %}">
+                    <div class="ms-2 me-auto">
+                        {% if task.completed %}
+                            <s>{{ task.content }}</s>
+                        {% else %}
+                            {{ task.content }}
+                        {% endif %}
+                        <div class="text-muted small mt-1">
+                            {{ task.created_at.strftime('%Y-%m-%d %H:%M') }}
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <a href="{{ url_for('complete', id=task.id) }}"
+                           class="btn btn-sm {% if task.completed %}btn-warning{% else %}btn-success{% endif %}">
+                            {% if task.completed %}Undo{% else %}Complete{% endif %}
+                        </a>
+                        <a href="{{ url_for('edit', id=task.id) }}"
+                           class="btn btn-sm btn-primary">Edit</a>
+                        <a href="{{ url_for('delete', id=task.id) }}"
+                           class="btn btn-sm btn-danger">Delete</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert alert-info">No tasks found. Add your first task above!</div>
+    {% endif %}
+{% endblock %}
