@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Most Dangerous Writing App</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>The Most Dangerous Writing App</h1>
+        <div class="controls">
+            <button onclick="setTimer(5)">5 Seconds</button>
+            <button onclick="setTimer(10)">10 Seconds</button>
+        </div>
+        <div id="timer">00:05</div>
+        <textarea id="text-area" placeholder="Start typing here..."></textarea>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
