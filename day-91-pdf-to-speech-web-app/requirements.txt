@@ -1,0 +1,16 @@
+PyMuPDF==1.25.3
+boto3==1.36.16
+botocore==1.36.16
+jmespath==1.0.1
+packaging==24.2
+pdf2image==1.17.0
+pillow==11.1.0
+pydub==0.25.1
+pytesseract==0.3.13
+python-dateutil==2.9.0.post0
+s3transfer==0.11.2
+six==1.17.0
+urllib3==2.3.0
+ffmpeg==1.4
+fitz==0.0.1.dev2
+
