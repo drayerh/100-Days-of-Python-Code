@@ -19,26 +19,26 @@ class PDFToSpeechConverter:
         self.temp_dir = tempfile.gettempdir()
 
     def _extract_text_with_ocr(self, pdf_path):
-        """Convert PDF to images and perform OCR"""
+        """Convert PDF to images and perform OCR, page by page"""
         images = convert_from_path(pdf_path, dpi=300)
-        full_text = []
+        text_pages = []
 
-        for i, image in enumerate(images):
+        for image in images:
             text = image_to_string(image, lang='eng')
             cleaned_text = re.sub(r'\s+', ' ', text).strip()
-            full_text.append(cleaned_text)
+            text_pages.append(cleaned_text)
 
-        return ' '.join(full_text)
+        return text_pages
 
     def _extract_text(self, pdf_path, force_ocr=False):
-        """Extract text with OCR fallback"""
+        """Extract text with OCR fallback, page by page"""
+        text_pages = []
         if not force_ocr:
             try:
                 doc = fitz.open(pdf_path)
-                text = []
                 for page in doc:
-                    text.append(page.get_text())
-                return '\n'.join(text)
+                    text_pages.append(page.get_text())
+                return text_pages
             except:
                 pass
         return self._extract_text_with_ocr(pdf_path)
@@ -67,19 +67,18 @@ class PDFToSpeechConverter:
     def convert(self, pdf_path, output_file='output.mp3', voice='Matthew', force_ocr=False):
         """Main conversion method"""
         # Extract text
-        text = self._process_text(self._extract_text(pdf_path, force_ocr))
-        if not text:
+        text_pages = self._extract_text(pdf_path, force_ocr)
+        if not text_pages:
             raise ValueError("No text extracted from PDF")
 
-        # Split text into chunks
-        chunks = self._split_text(text)
-
-        # Synthesize and combine audio
+        # Process and synthesize each page
         combined = AudioSegment.empty()
-        for i, chunk in enumerate(chunks):
-            print(f"Processing chunk {i + 1}/{len(chunks)}")
-            audio_stream = self._synthesize_speech(chunk, voice)
-            combined += AudioSegment.from_mp3(audio_stream)
+        for i, text in enumerate(text_pages):
+            processed_text = self._process_text(text)
+            if processed_text:
+                print(f"Processing page {i + 1}/{len(text_pages)}")
+                audio_stream = self._synthesize_speech(processed_text, voice)
+                combined += AudioSegment.from_mp3(audio_stream)
 
         # Export final file
         combined.export(output_file, format="mp3")
