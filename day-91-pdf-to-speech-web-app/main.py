@@ -15,14 +15,18 @@ os.environ["FFPROBE_BINARY"] = "ffprobe"
 
 class PDFToSpeechConverter:
     def __init__(self, region='us-east-1'):
+        # Initialize the Amazon Polly client with the specified region
         self.polly = boto3.client('polly', region_name=region)
+        # Get the temporary directory path
         self.temp_dir = tempfile.gettempdir()
 
     def _extract_text_with_ocr(self, pdf_path):
         """Convert PDF to images and perform OCR, page by page"""
+        # Convert PDF pages to images
         images = convert_from_path(pdf_path, dpi=300)
         text_pages = []
 
+        # Perform OCR on each image and clean the extracted text
         for image in images:
             text = image_to_string(image, lang='eng')
             cleaned_text = re.sub(r'\s+', ' ', text).strip()
@@ -35,26 +39,32 @@ class PDFToSpeechConverter:
         text_pages = []
         if not force_ocr:
             try:
+                # Open the PDF document
                 doc = fitz.open(pdf_path)
+                # Extract text from each page
                 for page in doc:
                     text_pages.append(page.get_text())
                 return text_pages
             except:
                 pass
+        # Fallback to OCR if text extraction fails
         return self._extract_text_with_ocr(pdf_path)
 
     def _process_text(self, text):
         """Clean and prepare text for synthesis"""
+        # Remove extra whitespace and unwanted characters
         text = re.sub(r'\s+', ' ', text)
         text = re.sub(r'[^\w\s.,;:!?\-()\']', '', text)
         return text[:300000]  # Polly character limit
 
     def _split_text(self, text, chunk_size=3000):
         """Split text into Polly-compatible chunks"""
+        # Split text into chunks of specified size
         return [text[i:i + chunk_size] for i in range(0, len(text), chunk_size)]
 
     def _synthesize_speech(self, text, voice='Matthew', engine='neural'):
         """Convert text to speech using Amazon Polly"""
+        # Synthesize speech using Amazon Polly
         response = self.polly.synthesize_speech(
             Text=text,
             OutputFormat='mp3',
@@ -62,11 +72,12 @@ class PDFToSpeechConverter:
             Engine=engine,
             TextType='text'
         )
+        # Return the audio stream as a BytesIO object
         return BytesIO(response['AudioStream'].read())
 
     def convert(self, pdf_path, output_file='output.mp3', voice='Matthew', force_ocr=False):
         """Main conversion method"""
-        # Extract text
+        # Extract text from the PDF
         text_pages = self._extract_text(pdf_path, force_ocr)
         if not text_pages:
             raise ValueError("No text extracted from PDF")
@@ -80,12 +91,13 @@ class PDFToSpeechConverter:
                 audio_stream = self._synthesize_speech(processed_text, voice)
                 combined += AudioSegment.from_mp3(audio_stream)
 
-        # Export final file
+        # Export the combined audio to the output file
         combined.export(output_file, format="mp3")
         return output_file
 
 
 if __name__ == "__main__":
+    # Parse command-line arguments
     parser = argparse.ArgumentParser(description='Convert PDF to Speech with OCR and Amazon Polly')
     parser.add_argument('pdf_path', help='Path to input PDF file')
     parser.add_argument('output_path', help='Path to output MP3 file')
@@ -96,6 +108,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    # Create an instance of the converter and perform the conversion
     converter = PDFToSpeechConverter()
     try:
         output = converter.convert(
