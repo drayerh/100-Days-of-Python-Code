@@ -1,0 +1,7 @@
+Flask==3.0.0
+Pillow==10.0.0
+numpy==1.24.3
+colorthief==0.2.1
+gunicorn==20.1.0
+python-dotenv==0.19.2
+collections==3.10.0

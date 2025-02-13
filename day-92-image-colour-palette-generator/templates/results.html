@@ -1,0 +1,21 @@
+<!-- templates/results.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Same styles as upload.html -->
+</head>
+<body>
+    <div class="container">
+        <h1>Top 10 Colors</h1>
+        <div class="color-results">
+            {% for color in colors %}
+            <div class="color-card" style="background-color: {{ color.hex }};">
+                <div>{{ color.hex }}</div>
+                <div>{{ color.percentage }}%</div>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="/">Analyze Another Image</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!-- templates/upload.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Color Analyzer</title>
+    <style>
+        .container { max-width: 800px; margin: 2rem auto; padding: 2rem; }
+        .upload-box { border: 2px dashed #ccc; padding: 2rem; text-align: center; }
+        .color-results { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; }
+        .color-card { padding: 1rem; text-align: center; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Image Color Analyzer</h1>
+        <form method="post" enctype="multipart/form-data">
+            <div class="upload-box">
+                <input type="file" name="file" accept="image/*" required>
+                <button type="submit">Analyze Colors</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
