@@ -36,8 +36,10 @@ score_display.hideturtle()
 score_display.goto(-380, 260)
 score_display.write(f"Score: {score}", font=("Courier", 14, "normal"))
 
-
 def create_aliens():
+    """
+    Create a grid of alien invaders and add them to the aliens list.
+    """
     for y in range(200, 100, -50):
         for x in range(-300, 300, 60):
             alien = turtle.Turtle()
@@ -48,8 +50,10 @@ def create_aliens():
             alien.goto(x, y)
             aliens.append(alien)
 
-
 def create_barriers():
+    """
+    Create barriers for the player and add them to the barriers list.
+    """
     for x in [-300, -100, 100, 300]:
         barrier = turtle.Turtle()
         barrier.color("gray")
@@ -59,22 +63,28 @@ def create_barriers():
         barrier.goto(x, -200)
         barriers.append(barrier)
 
-
 def move_left():
+    """
+    Move the player ship to the left.
+    """
     x = player.xcor()
     if x > -380:
         x -= player_speed
     player.setx(x)
 
-
 def move_right():
+    """
+    Move the player ship to the right.
+    """
     x = player.xcor()
     if x < 380:
         x += player_speed
     player.setx(x)
 
-
 def fire_bullet():
+    """
+    Fire a bullet from the player ship.
+    """
     global bullet_state
     if bullet_state == "ready":
         bullet_state = "fire"
@@ -107,8 +117,10 @@ def fire_bullet():
         bullet.hideturtle()
         bullet_state = "ready"
 
-
 def move_aliens():
+    """
+    Move the aliens across the screen and downwards.
+    """
     global alien_direction
     move_down = False
 
@@ -131,8 +143,10 @@ def move_aliens():
         if alien.ycor() < -220:
             game_over("ALIENS INVADED!")
 
-
 def game_over(message):
+    """
+    Display the game over message and end the game.
+    """
     screen.clear()
     screen.bgcolor("black")
     game_over_display = turtle.Turtle()
@@ -142,7 +156,6 @@ def game_over(message):
     screen.update()
     time.sleep(3)
     turtle.bye()
-
 
 # Keyboard bindings
 screen.listen()
