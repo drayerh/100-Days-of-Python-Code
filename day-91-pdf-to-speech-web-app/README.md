@@ -19,7 +19,7 @@ This project is a PDF to Speech converter that uses OCR (Optical Character Recog
 - ffmpeg (for audio processing)
 
 ## Installation
-
+                                                                                                    
 1. **Clone the repository:**
 
     ```sh
