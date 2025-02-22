@@ -49,7 +49,7 @@ with app.app_context():
 # External API Config
 COINGECKO_API = "https://api.coingecko.com/api/v3"
 NEWSAPI_URL = "https://newsapi.org/v2/everything"
-DEEPSEEK_API = "https://api.deepseek.com/v1/model=deepseek-reasoner"
+DEEPSEEK_API = "https://api.deepseek.com/"
 NEWSAPI_KEY = os.getenv("NEWSAPI_KEY")
 
 def get_xrp_price():
@@ -74,11 +74,20 @@ def analyze_with_deepseek(text):
     headers = {'Authorization': f'Bearer {os.getenv("DEEPSEEK_API_KEY")}'}
     payload = {
         "text": text,
+        "model": "deepseek-r1",
         "analysis_type": "financial_impact",
         "audience": "retail_investors"
     }
     response = requests.post(DEEPSEEK_API, json=payload, headers=headers)
-    return response.json().get('analysis', 'No analysis available')
+
+    # Log the response for debugging
+    app.logger.debug(f"DeepSeek API Response: {response.status_code} {response.text}")
+
+    if response.status_code == 200:
+        return response.json().get('analysis', 'No analysis available')
+    else:
+        app.logger.error(f"Failed to analyze with DeepSeek API: {response.status_code} {response.text}")
+        return 'No analysis available'
 
 def send_whatsapp_message(message):
     """Send message via Twilio WhatsApp API"""
@@ -153,8 +162,8 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(
     func=create_daily_alert,
     trigger='cron',
-    hour=22,
-    minute=39,
+    hour=1,
+    minute=30,
     timezone='GMT'
 )
 scheduler.start()
@@ -164,6 +173,11 @@ scheduler.start()
 def dashboard():
     latest_alert = DailyAlert.query.order_by(DailyAlert.date.desc()).first()
     news = NewsArticle.query.order_by(NewsArticle.timestamp.desc()).limit(5).all()
+
+    # Add logging to debug
+    app.logger.debug(f"Latest Alert: {latest_alert}")
+    app.logger.debug(f"News: {news}")
+
     return render_template('dashboard.html', alert=latest_alert, news=news)
 
 @app.route('/history')
