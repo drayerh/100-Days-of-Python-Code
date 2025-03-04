@@ -1,0 +1,2 @@
+# Track large files with Git LFS
+day-99-Space-Missions-analysis/Space_Missions_Analysis_(start).ipynb filter=lfs diff=lfs merge=lfs -text
